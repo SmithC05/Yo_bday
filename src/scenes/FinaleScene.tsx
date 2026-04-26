@@ -1,5 +1,5 @@
 import { AnimatePresence, m } from 'framer-motion'
-import { ArrowLeft, Heart, Mail, Music, RotateCcw, Sparkles, Star } from 'lucide-react'
+import { ArrowLeft, Heart, RotateCcw, Sparkles, Star } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -238,7 +238,7 @@ function HeartbeatGlow({ color }: { color: string }) {
 // ─── Ambient floating particles ───────────────────────────────────────────────
 
 function AmbientParticles({ phase }: { phase: Phase }) {
-  const count = phase === 'hbd' || phase === 'surprise' ? 32 : phase === 'wish' || phase === 'affirmation' ? 12 : 16
+  const count = phase === 'hbd' ? 32 : phase === 'wish' || phase === 'affirmation' ? 12 : 16
   const items = useRef(
     Array.from({ length: 40 }, (_, i) => ({
       id: i,
