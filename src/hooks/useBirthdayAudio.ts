@@ -39,6 +39,7 @@ export type BirthdayAudioControls = {
   playHighScore: () => void
   playWish: () => void
   playFinale: () => void
+  stopAllBgm: (fadeDuration?: number) => void
 }
 
 const AMBIENT_CHORDS = [
@@ -489,5 +490,6 @@ export function useBirthdayAudio(options: BirthdayAudioOptions = {}): BirthdayAu
     playHighScore,
     playWish,
     playFinale,
+    stopAllBgm,
   }
 }

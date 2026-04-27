@@ -21,6 +21,7 @@ type FinaleSceneProps = {
   onFinale: () => void
   onTriggerFinaleBgm?: () => void
   onTriggerSpecialBgm?: () => void
+  onStopBgm?: (fadeDuration?: number) => void
 }
 
 // 'wish'              → atmospheric make-a-wish tap/auto
@@ -30,7 +31,9 @@ type FinaleSceneProps = {
 // 'hbd'               → "Happy Birthday ❤️" + glow burst
 // 'galleryTransition' → cinematic transition to gallery
 // 'gallery'           → floating memories space
-type Phase = 'wish' | 'affirmation' | 'lines' | 'message' | 'hbd' | 'galleryTransition' | 'gallery'
+// 'video'             → 30s final video clip
+// 'onceMore'          → "Once again happy birthday" final text
+type Phase = 'wish' | 'affirmation' | 'lines' | 'message' | 'hbd' | 'galleryTransition' | 'gallery' | 'video' | 'onceMore'
 
 // ─── Wish phase ───────────────────────────────────────────────────────────────
 
@@ -554,6 +557,79 @@ function GalleryTransition({ onDone }: { onDone: () => void }) {
   )
 }
 
+function VideoPhase({ onDone }: { onDone: () => void }) {
+  return (
+    <m.div
+      key="video"
+      className="fixed inset-0 z-[2000] flex items-center justify-center bg-black"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <video
+        src="/assets/pic/final.mp4"
+        className="h-full w-full object-contain"
+        autoPlay
+        onEnded={onDone}
+        playsInline
+      />
+      <m.button 
+        onClick={onDone}
+        className="absolute bottom-10 right-10 text-white/30 text-[10px] uppercase tracking-[0.3em] hover:text-white/60 transition-colors"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+      >
+        Skip ➔
+      </m.button>
+    </m.div>
+  )
+}
+
+function OnceMorePhase({ onReplay }: { onReplay: () => void }) {
+  return (
+    <m.div
+      key="once-more"
+      className="relative z-10 flex flex-col items-center gap-10 px-8 text-center"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+    >
+       <m.div
+        initial={{ y: 24, opacity: 0, filter: 'blur(12px)' }}
+        animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+        transition={{ delay: 0.6, duration: 1 }}
+      >
+        <div 
+          className="font-display text-4xl leading-tight text-white sm:text-6xl"
+          style={{
+            textShadow: '0 0 50px rgba(255,160,210,0.6), 0 0 100px rgba(200,100,255,0.3)'
+          }}
+        >
+          Once again...
+          <br />
+          <span className="text-white/90">Happy Birthday Akka! 💜</span>
+        </div>
+      </m.div>
+
+      <m.button
+        type="button"
+        onClick={onReplay}
+        className="mt-6 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/12 px-9 py-5 text-[14px] font-semibold uppercase tracking-[0.3em] text-white/90 backdrop-blur-3xl transition-all duration-500 hover:bg-white/20 hover:scale-105 hover:border-white/40"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.8 }}
+        style={{
+          boxShadow: '0 0 35px rgba(255,140,200,0.25), 0 0 70px rgba(200,100,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1)'
+        }}
+      >
+        <RotateCcw className="w-4 h-4" /> Play Again
+      </m.button>
+    </m.div>
+  )
+}
+
 // ─── FinaleScene ──────────────────────────────────────────────────────────────
 
 export function FinaleScene({
@@ -569,6 +645,7 @@ export function FinaleScene({
   onFinale,
   onTriggerFinaleBgm,
   onTriggerSpecialBgm,
+  onStopBgm,
 }: FinaleSceneProps) {
   // Start at 'wish' — user makes a wish first, then affirmation flows into cinematic lines
   const [phase, setPhase] = useState<Phase>('wish')
@@ -622,7 +699,7 @@ export function FinaleScene({
 
   // Heartbeat glow color per phase
   const glowColor =
-    phase === 'hbd' || phase === 'gallery'
+    phase === 'hbd' || phase === 'gallery' || phase === 'onceMore'
       ? 'rgba(255,140,200,0.22)'
       : 'rgba(180,100,255,0.16)'
 
@@ -637,10 +714,10 @@ export function FinaleScene({
       transition={{ duration: 1.2, ease: 'easeInOut' }}
     >
       {/* Heartbeat glow */}
-      {phase !== 'gallery' && <HeartbeatGlow color={glowColor} />}
+      {phase !== 'gallery' && phase !== 'video' && <HeartbeatGlow color={glowColor} />}
 
       {/* Ambient particles — increase on HBD */}
-      {phase !== 'gallery' && <AmbientParticles phase={phase} />}
+      {phase !== 'gallery' && phase !== 'video' && <AmbientParticles phase={phase} />}
 
       {/* Confetti on HBD moment */}
       <AnimatePresence>{showConfetti && <ConfettiBurst key="confetti" />}</AnimatePresence>
@@ -831,18 +908,39 @@ export function FinaleScene({
               </m.button>
               
               <m.button
-                id="replay-btn-gallery"
+                id="surprise-btn-gallery"
                 type="button"
-                onClick={onReplay}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-6 py-3 text-[11px] uppercase tracking-[0.28em] text-white/52 backdrop-blur-xl transition-colors duration-300 hover:bg-white/12 hover:text-white/75"
+                onClick={() => {
+                  onStopBgm?.(800)
+                  setPhase('video')
+                }}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-7 py-4 text-[12px] uppercase tracking-[0.28em] text-white/70 backdrop-blur-xl transition-all duration-300 hover:bg-white/12 hover:text-white/90 hover:scale-105"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.2 }}
+                style={{
+                  boxShadow: '0 0 30px rgba(255,255,255,0.05)'
+                }}
               >
-                <RotateCcw className="w-3 h-3" /> play again
+                Watch a Surprise <Sparkles className="w-3 h-3 ml-1" />
               </m.button>
             </div>
           </m.div>
+        )}
+
+        {/* ── Phase: VIDEO ──────────────────────────────────────────────────── */}
+        {phase === 'video' && (
+          <VideoPhase 
+            onDone={() => {
+              onTriggerFinaleBgm?.()
+              setPhase('onceMore')
+            }} 
+          />
+        )}
+
+        {/* ── Phase: ONCE MORE ──────────────────────────────────────────────── */}
+        {phase === 'onceMore' && (
+          <OnceMorePhase onReplay={onReplay} />
         )}
       </AnimatePresence>
     </m.div>

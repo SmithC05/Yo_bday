@@ -95,6 +95,7 @@ function App() {
       onFinale={audio.playFinale}
       onTriggerFinaleBgm={audio.playFinaleBgm}
       onTriggerSpecialBgm={audio.playSpecialBgm}
+      onStopBgm={audio.stopAllBgm}
     />
   )
 
