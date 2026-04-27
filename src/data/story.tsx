@@ -30,7 +30,7 @@ export const story = {
     ],
     /** Gallery of floating memories */
     galleryImages: [
-      '/assets/pic/c1.jpeg',
+      '/assets/pic/c2.jpeg',
       '/assets/pic/s1.jpeg',
       '/assets/pic/s2.jpeg',
       '/assets/pic/s3.jpeg',
@@ -43,15 +43,16 @@ export const story = {
       '/assets/pic/g4.jpeg',
       '/assets/pic/g5.jpeg',
       '/assets/pic/g6.jpeg',
+      
     ],
   },
   choicePaths: {
     fun: {
       cards: [
-        { id: 'c1', imageUrl: '/assets/pic/s1.jpeg', text: 'The face you make when you think no one’s watching 😌' },
-        { id: 'c2', imageUrl: '/assets/pic/s2.jpeg', text: 'Unbothered. Iconic. That’s you.' },
-        { id: 'c3', imageUrl: '/assets/pic/s3.jpeg', text: 'And this...is just perfect' },
-        { id: 'c4', imageUrl: '/assets/pic/s4.jpeg', text: 'You’re always in your own world — and honestly, fair.' },
+        { id: 'c1', imageUrl: '/assets/pic/s6.jpeg', text: 'The face you make when you think no one’s watching 😌' },
+        { id: 'c2', imageUrl: '/assets/pic/s3.jpeg', text: 'Unbothered. Iconic. That’s you.' },
+        { id: 'c3', imageUrl: '/assets/pic/s7.jpeg', text: 'And this...is just perfect' },
+        { id: 'c4', imageUrl: '/assets/pic/s9.jpeg', text: 'You’re always in your own world — and honestly, fair.' },
         { id: 'c5', imageUrl: '/assets/pic/s5.jpeg', text: 'Just… you. And that’s enough. 🤍' },
       ],
     },

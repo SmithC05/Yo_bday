@@ -398,7 +398,7 @@ function FloatingMemorySpace({ images }: { images: string[] }) {
   // Map images to slots based on their filename/type
   const getSlotIndex = (src: string) => {
     const filename = src.split('/').pop()?.split('.')[0] || ''
-    if (filename === 'c1') return 0
+    if (filename === 'c2') return 0
     
     // Group images g1-g6 -> slots 1-6
     if (filename.startsWith('g')) {

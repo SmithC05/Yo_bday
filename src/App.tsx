@@ -120,7 +120,7 @@ function App() {
         onComplete={handleCountdownComplete}
       />
     )
-  } else if (sceneIndex === 3) {
+  } else if (sceneIndex === 4) {
     scene = (
       <ChoiceScene
         key="choice"
@@ -132,7 +132,7 @@ function App() {
         onNext={nextScene}
       />
     )
-  } else if (sceneIndex === 4) {
+  } else if (sceneIndex === 3) {
     scene = (
       <PuzzleScene
         key="puzzle"
